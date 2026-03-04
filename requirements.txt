@@ -1,0 +1,11 @@
+pandas
+numpy
+opencv-python
+pillow
+tqdm
+torch
+torchvision
+torchaudio
+transformers
+accelerate
+faster-whisper
