@@ -1,0 +1,37 @@
+name: Python Tests
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+        cache: 'pip'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        # We only need the core testing dependencies, plus the main script's imports.
+        # Since all GPU/ffmpeg operations are mocked in the tests, we don't need
+        # full CUDA support or system-level ffmpeg installed in the runner!
+        pip install pandas numpy opencv-python pillow tqdm pytest
+        # Optional dependencies used in tests (need to be importable even if mocked)
+        pip install faster-whisper transformers accelerate torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+        
+    - name: Run pytest
+      run: |
+        pytest test_video_transcribe.py -v
