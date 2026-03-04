@@ -30,7 +30,8 @@ jobs:
         # full CUDA support or system-level ffmpeg installed in the runner!
         pip install pandas numpy opencv-python pillow tqdm pytest
         # Optional dependencies used in tests (need to be importable even if mocked)
-        pip install faster-whisper transformers accelerate torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+        pip install faster-whisper transformers accelerate
+        pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
         
     - name: Run pytest
       run: |
